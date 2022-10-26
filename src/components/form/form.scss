@@ -1,6 +1,16 @@
 $backgroundColor: #efefef;
 $radius: 40%;
 
+.request-body-input-container {
+  width: 300px;
+  height: 100px;
+}
+
+.request-body-input {
+  width: 300px;
+  height: 100px;
+}
+
 form {
   display: inline-block;
   margin: auto;
@@ -17,7 +27,8 @@ form {
         padding: .25rem .5rem;
         background: #ccc;
 
-        &:hover, &.active {
+        &:hover,
+        &.active {
           background: #fff;
         }
       }
