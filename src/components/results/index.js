@@ -1,4 +1,8 @@
 import React from 'react';
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+
+import './results.scss';
 
 function Results(props) {
   return (
@@ -6,12 +10,14 @@ function Results(props) {
       <div>Status: { props?.data?.status }</div>
       <hr/>
       <div>Headers:</div>
-      <pre>
+      <SyntaxHighlighter language="javascript" style={docco}>
         {props.data?.headers ? JSON.stringify(props.data.headers, undefined, 2) : null}
-      </pre>
+      </SyntaxHighlighter>
       <hr/>
       <div>Data:</div>
-      <pre role="code">{props.data?.data ? JSON.stringify(props.data.data, undefined, 2) : null}</pre>
+      <SyntaxHighlighter language="javascript" style={docco}>
+        {props.data?.data ? JSON.stringify(props.data.data, undefined, 2) : null}
+      </SyntaxHighlighter>
     </section>
   );
 }
