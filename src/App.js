@@ -58,7 +58,7 @@ function App(props) {
     <>
       <Header />
       <div>Request Method: {requestParams.method}</div>
-      <div>URL: {requestParams.url}</div>
+      <div data-testid="url-display">URL: {requestParams.url}</div>
       <Form loading={ loading } handleApiCall={callApi} handleUrlChange={handleUrlChange} url={requestParams.url} handleClickMethod={handleClickMethod} method={ requestParams.method } />
       { loading ? "loading..." :
         <Results data={data} />

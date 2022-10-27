@@ -33,7 +33,7 @@ function Form(props) {
         <form onSubmit={handleSubmit}>
           <label >
             <span>URL: </span>
-          <input name="url" type="text" value={props.url} onChange={props.handleUrlChange } />
+          <input name="url" data-testid="url-input" type="text" value={props.url} onChange={props.handleUrlChange } />
           <button type="submit" disabled={ props.loading }>GO!</button>
           </label>
           <label className="methods">
