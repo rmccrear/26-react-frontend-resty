@@ -2,6 +2,7 @@
 import {render, screen} from '@testing-library/react'
 import '@testing-library/jest-dom'
 import Results from '.';
+import { toBeChecked } from '@testing-library/jest-dom/dist/matchers';
 
 
 describe('Results', () => {
@@ -10,8 +11,7 @@ describe('Results', () => {
       animal: "cat"
     }
     render(<Results data={ data } />);
-    const results = screen.getByRole('code');
-    // expect(results).toHaveTextContent(JSON.stringify(data, undefined, 2))
-    expect(results).toBeInTheDocument();
+    const results = screen.getAllByRole('code');
+    expect(results.length).toBe(2)
   });
 });
