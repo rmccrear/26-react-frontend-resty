@@ -37,10 +37,18 @@ function Form(props) {
           <button type="submit" disabled={ props.loading }>GO!</button>
           </label>
           <label className="methods">
-          <span id="GET" onClick={ props.handleClickMethod }>GET</span>
-            <span id="POST" onClick={ props.handleClickMethod }>POST</span>
-            <span id="PUT" onClick={ props.handleClickMethod }>PUT</span>
-            <span id="DELETE" onClick={ props.handleClickMethod }>DELETE</span>
+          <span id="GET"
+            className={props.method === 'GET' ? 'active' : 'inactive'}
+            onClick={props.handleClickMethod}>GET</span>
+          <span id="POST"
+            className={props.method === 'POST' ? 'active' : 'inactive'}
+            onClick={props.handleClickMethod}>POST</span>
+          <span id="PUT"
+            className={props.method === 'PUT' ? 'active' : 'inactive'}
+            onClick={props.handleClickMethod}>PUT</span>
+          <span id="DELETE"
+            className={props.method === 'DELETE' ? 'active' : 'inactive'}
+            onClick={props.handleClickMethod}>DELETE</span>
           </label>
           <div className="request-body-input-container">
             {
