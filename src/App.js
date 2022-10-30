@@ -16,21 +16,6 @@ function App(props) {
   const [requestParams, setRequestParams] = useState({url: '', method: 'GET'});
   const [loading, setLoading] = useState(false);
 
-  const handleClickMethod = (e) => { 
-    const methodInput = e.target.id;
-    const newRequestParams = { ...requestParams, method: methodInput};
-    setRequestParams(newRequestParams);
-  }
-  
-  const handleUrlChange = (e) => { 
-    const newUrl = e.target.value;
-    const newRequestParams = { ...requestParams, url: newUrl};
-    setRequestParams(newRequestParams);
-
-  }
-
-
-
   const callApi = async (requestParams) => {
     let data;
     setLoading(true);
@@ -59,7 +44,7 @@ function App(props) {
       <Header />
       <div>Request Method: {requestParams.method}</div>
       <div data-testid="url-display">URL: {requestParams.url}</div>
-      <Form loading={ loading } handleApiCall={callApi} handleUrlChange={handleUrlChange} url={requestParams.url} handleClickMethod={handleClickMethod} method={ requestParams.method } />
+      <Form loading={ loading } handleApiCall={callApi} />
       { loading ? "loading..." :
         <Results data={data} />
       }
