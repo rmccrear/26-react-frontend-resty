@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
-// import axios from 'axios';
+import Fetcher from './lib/fetcher';
 
 import './app.scss';
 
-// Let's talk about using index.js and some other name in the component folder
-// There's pros and cons for each way of doing this ...
 import Header from './components/header';
 import Footer from './components/footer';
 import Form from './components/form';
 import Results from './components/results';
-import axios from 'axios';
 
 function App(props) {
   const [data, setData] = useState(null);
@@ -17,25 +14,25 @@ function App(props) {
   const [loading, setLoading] = useState(false);
 
   const callApi = async (requestParams) => {
-    let data;
     setLoading(true);
-    try {
-      //const axiosReq = {
-      const axiosReq = {
-        method: requestParams.method,
-        url: requestParams.url,
+    const fetcher = new Fetcher();
+    const {url, method, body} = requestParams;
+
+    let result;
+    if(method === 'POST' || method === 'PUT') {
+      if(method === 'POST') {
+        result = await fetcher.post(url, {body: body});
+      } else if(method === 'PUT') {
+        result = await fetcher.put(url, {body: body});
       }
-      if (requestParams.method === 'POST' || requestParams.method === 'PUT') { 
-        axiosReq.data = requestParams.body;
-      }
-      data = await axios(
-        axiosReq
-      );
-    } catch (e) { 
-      data = e;
+    } else if(method === 'GET') {
+      result = await fetcher.get(url);
+    } else if(method === 'DELETE') {
+      result = await fetcher.delete(url);
     }
     setLoading(false);
-    setData(data);
+    result.data = result.body; // axios puts body in `data`, we will follow that.
+    setData(result);
     setRequestParams(requestParams)
   }
 
