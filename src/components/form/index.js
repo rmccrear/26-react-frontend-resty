@@ -2,22 +2,14 @@ import { useState } from 'react';
 import './form.scss';
 
 function Form(props) {
+  const [url, setUrl] = useState('');
+  const [method, setMethod] = useState('GET')
   const [body, setBody] = useState('');
 
   const handleSubmit = e => {
     e.preventDefault();
-    /*
-    const formData = {
-      method:'GET',
-      url: 'https://pokeapi.co/api/v2/pokemon',
-      data: 
-    };
-    */
-    const formData = {
-      method: props.method,
-      url: props.url
-    }
-    if (props.method === 'POST' || props.method === 'PUT') { 
+    const formData = { method, url };
+    if (method === 'POST' || method === 'PUT') { 
       formData.body = body;
     }
     props.handleApiCall(formData);
@@ -28,27 +20,38 @@ function Form(props) {
     setBody(newBody);
   }
 
+  const handleClickMethod = (e) => {
+    const newMethod = e.target.id;
+    setMethod(newMethod);
+  }
+
+  const handleUrlChange = (e) => { 
+    const newUrl = e.target.value;
+    setUrl(newUrl);
+  }
+
   return (
       <>
         <form onSubmit={handleSubmit}>
           <label >
             <span>URL: </span>
-          <input name="url" data-testid="url-input" type="text" value={props.url} onChange={props.handleUrlChange } />
-          <button type="submit" disabled={ props.loading }>GO!</button>
+            <input name="url" data-testid="url-input" type="text" value={ url } onChange={ handleUrlChange } />
+            <button type="submit" data-testid="url-input-submit" disabled={ props.loading }>GO!</button>
           </label>
+          <div className="input-url-display">{url}</div>
           <label className="methods">
           <span id="GET"
-            className={props.method === 'GET' ? 'active' : 'inactive'}
-            onClick={props.handleClickMethod}>GET</span>
+            className={method === 'GET' ? 'active' : 'inactive'}
+            onClick={handleClickMethod}>GET</span>
           <span id="POST"
-            className={props.method === 'POST' ? 'active' : 'inactive'}
-            onClick={props.handleClickMethod}>POST</span>
+            className={method === 'POST' ? 'active' : 'inactive'}
+            onClick={handleClickMethod}>POST</span>
           <span id="PUT"
-            className={props.method === 'PUT' ? 'active' : 'inactive'}
-            onClick={props.handleClickMethod}>PUT</span>
+            className={method === 'PUT' ? 'active' : 'inactive'}
+            onClick={handleClickMethod}>PUT</span>
           <span id="DELETE"
-            className={props.method === 'DELETE' ? 'active' : 'inactive'}
-            onClick={props.handleClickMethod}>DELETE</span>
+            className={method === 'DELETE' ? 'active' : 'inactive'}
+            onClick={handleClickMethod}>DELETE</span>
           </label>
           <div className="request-body-input-container">
             {

@@ -1,56 +1,42 @@
-import React, { useState } from 'react';
-// import axios from 'axios';
+import React, { useState, useReducer } from 'react';
+import Fetcher from './lib/fetcher';
 
 import './app.scss';
 
-// Let's talk about using index.js and some other name in the component folder
-// There's pros and cons for each way of doing this ...
 import Header from './components/header';
 import Footer from './components/footer';
 import Form from './components/form';
 import Results from './components/results';
-import axios from 'axios';
+import History from './components/history';
+import { reducer } from './reducers';
 
 function App(props) {
+  const [state, dispatch] = useReducer(reducer, {history: []});
   const [data, setData] = useState(null);
   const [requestParams, setRequestParams] = useState({url: '', method: 'GET'});
   const [loading, setLoading] = useState(false);
 
-  const handleClickMethod = (e) => { 
-    const methodInput = e.target.id;
-    const newRequestParams = { ...requestParams, method: methodInput};
-    setRequestParams(newRequestParams);
-  }
-  
-  const handleUrlChange = (e) => { 
-    const newUrl = e.target.value;
-    const newRequestParams = { ...requestParams, url: newUrl};
-    setRequestParams(newRequestParams);
-
-  }
-
-
-
   const callApi = async (requestParams) => {
-    let data;
     setLoading(true);
-    try {
-      //const axiosReq = {
-      const axiosReq = {
-        method: requestParams.method,
-        url: requestParams.url,
+    const fetcher = new Fetcher();
+    const {url, method, body} = requestParams;
+
+    let result;
+    if(method === 'POST' || method === 'PUT') {
+      if(method === 'POST') {
+        result = await fetcher.post(url, {body: body});
+      } else if(method === 'PUT') {
+        result = await fetcher.put(url, {body: body});
       }
-      if (requestParams.method === 'POST' || requestParams.method === 'PUT') { 
-        axiosReq.data = requestParams.body;
-      }
-      data = await axios(
-        axiosReq
-      );
-    } catch (e) { 
-      data = e;
+    } else if(method === 'GET') {
+      result = await fetcher.get(url);
+    } else if(method === 'DELETE') {
+      result = await fetcher.delete(url);
     }
     setLoading(false);
-    setData(data);
+    result.data = result.body; // axios puts body in `data`, we will follow that.
+    setData(result);
+    dispatch({type: 'ADD_TO_HISTORY', restOp: {url, method ,result}});
     setRequestParams(requestParams)
   }
 
@@ -59,10 +45,11 @@ function App(props) {
       <Header />
       <div>Request Method: {requestParams.method}</div>
       <div data-testid="url-display">URL: {requestParams.url}</div>
-      <Form loading={ loading } handleApiCall={callApi} handleUrlChange={handleUrlChange} url={requestParams.url} handleClickMethod={handleClickMethod} method={ requestParams.method } />
+      <Form loading={ loading } handleApiCall={callApi} />
       { loading ? "loading..." :
         <Results data={data} />
       }
+      <History history={state.history} />
       <Footer />
     </>
   );
