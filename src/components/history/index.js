@@ -1,17 +1,12 @@
-
-function HistoryItem (props) {
-  return (
-    <div className="history-item">
-      <div>{ props.url }</div>
-    </div>
-  );
-}
+import HistoryItem from "./history-item";
+import './history.scss';
 
 function History(props) {
   return ( 
-    <div>
+    <section>
+      <h2>History:</h2>
       {props.history.map((h, idx) => (<HistoryItem key={idx} {...h} />))}
-    </div> 
+    </section> 
   );
 }
 
