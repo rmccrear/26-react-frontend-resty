@@ -38,7 +38,6 @@ const processResponse = async (response) => {
 class Fetcher {
 
   async get(url) {
-    console.log('get...');
     const result = sendRequest(url);
     return result;
   }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 import Fetcher from './lib/fetcher';
 
 import './app.scss';
@@ -7,8 +7,11 @@ import Header from './components/header';
 import Footer from './components/footer';
 import Form from './components/form';
 import Results from './components/results';
+import History from './components/history';
+import { reducer } from './reducers';
 
 function App(props) {
+  const [state, dispatch] = useReducer(reducer, {history: []});
   const [data, setData] = useState(null);
   const [requestParams, setRequestParams] = useState({url: '', method: 'GET'});
   const [loading, setLoading] = useState(false);
@@ -33,6 +36,7 @@ function App(props) {
     setLoading(false);
     result.data = result.body; // axios puts body in `data`, we will follow that.
     setData(result);
+    dispatch({type: 'ADD_TO_HISTORY', restOp: {url, method ,result}});
     setRequestParams(requestParams)
   }
 
@@ -45,6 +49,7 @@ function App(props) {
       { loading ? "loading..." :
         <Results data={data} />
       }
+      <History history={state.history} />
       <Footer />
     </>
   );
